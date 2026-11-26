@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+    <path
+        android:pathData="M100,10 A90,90 0 1,1 99.9,10 Z"
+        android:strokeWidth="2.5"
+        android:strokeColor="#66FFFFFF" />
+    <!-- 12, 3, 6, 9 major markers -->
+    <path
+        android:pathData="M100,16 L100,28 M184,100 L172,100 M100,184 L100,172 M16,100 L28,100"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFFFFFFF" />
+    <!-- 1, 2, 4, 5, 7, 8, 10, 11 minor markers -->
+    <path
+        android:pathData="M142,27.3 L137.5,35.1 M172.7,58 L164.9,62.5 M172.7,142 L164.9,137.5 M142,172.7 L137.5,164.9 M58,172.7 L62.5,164.9 M27.3,142 L35.1,137.5 M27.3,58 L35.1,62.5 M58,27.3 L62.5,35.1"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeColor="#99FFFFFF" />
+</vector>

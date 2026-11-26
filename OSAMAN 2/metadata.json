@@ -1,0 +1,6 @@
+{
+  "name": "ChromaClock",
+  "description": "An adaptive color-shifting clock, home screen widget studio, system screensaver, live wallpaper, and focus timer.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

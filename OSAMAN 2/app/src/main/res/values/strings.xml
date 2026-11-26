@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ChromaClock</string>
+    <string name="widget_description">Color-shifting digital and analog clock that fits any home screen layout.</string>
+    <string name="widget_analog_description">Luminous color-changing analog dial widget.</string>
+    <string name="dream_service_name">ChromaClock Screensaver</string>
+    <string name="live_wallpaper_name">ChromaClock Live Aura</string>
+    <string name="live_wallpaper_description">Dynamic color-shifting clock and atmospheric gradient live wallpaper.</string>
+    <string name="nav_clock">Clock</string>
+    <string name="nav_wallpapers">Wallpapers</string>
+    <string name="nav_screensaver">Screensaver</string>
+    <string name="nav_studio">Extras</string>
+    <string name="action_launch_screensaver">Start Screensaver</string>
+    <string name="action_add_widget">Add Clock to Home Screen</string>
+    <string name="action_set_wallpaper">Apply Wallpaper</string>
+    <string name="action_set_live_wallpaper">Set Live Wallpaper</string>
+    <string name="action_system_screensaver">System Screensaver Settings</string>
+</resources>
