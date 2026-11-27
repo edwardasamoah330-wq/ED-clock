@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;800&family=DM+Serif+Display:ital@0;1&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  --bg:#0a0a10;
+  --surface:#14141d;
+  --surface-2:#1c1c28;
+  --line:rgba(255,255,255,.12);
+  --text:#f6f4ef;
+  --muted:#a9a7b8;
+  --accent:#ff6b35;
+  --accent-2:#ffd166;
+  --safe-area-inset-top:0px;
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#f4f1ea;
+    --surface:#ffffff;
+    --surface-2:#ece8df;
+    --line:rgba(20,18,30,.14);
+    --text:#17141f;
+    --muted:#676371;
+    --accent:#e84d2a;
+    --accent-2:#f2a900;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Space Grotesk",system-ui,sans-serif}
+.font-mono2{font-family:"JetBrains Mono",monospace}
+.font-serif2{font-family:"DM Serif Display",serif}
+.no-scrollbar::-webkit-scrollbar{display:none}
+.no-scrollbar{scrollbar-width:none}
+@keyframes drift{0%{transform:translate(0,0)}25%{transform:translate(22px,-16px)}50%{transform:translate(-14px,18px)}75%{transform:translate(18px,14px)}100%{transform:translate(0,0)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulseSoft{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes shimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.drift{animation:drift 28s ease-in-out infinite}
+.floaty{animation:floaty 5s ease-in-out infinite}
+.shimmer{background-size:220% 220%;animation:shimmer 10s ease infinite}
+input[type="range"]{accent-color:var(--accent)}
+input[type="color"]{appearance:none;border:0;padding:0;background:none;width:44px;height:44px;border-radius:999px;overflow:hidden;cursor:pointer}
+input[type="color"]::-webkit-color-swatch-wrapper{padding:0}
+input[type="color"]::-webkit-color-swatch{border:2px solid rgba(255,255,255,.35);border-radius:999px}
