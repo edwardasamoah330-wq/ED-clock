@@ -1,0 +1,20 @@
+"name":"ED Clock",
+"short_name":"ED Clock",
+"description":"ED Clock - A beautiful color-shifting clock, widget studio, screensaver, live wallpaper, and focus timer.",
+"id":"/",
+"start_url":"/",
+"scope":"/",
+"display":"standalone",
+"orientation":"portrait",
+"background_color":"#000000",
+"theme_color":"#000000",
+▶
+"categories":[
+
+    "utilities",
+    "productivity",
+    "lifestyle"
+
+],
+▶
+"icons":[
