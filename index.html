@@ -1,47 +1,163 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;800&family=DM+Serif+Display:ital@0;1&display=swap');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ED Clock</title>
+<meta name="theme-color" content="#000000">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ED Clock">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--c1:#ff5e8a;--c2:#7c5cff;--c3:#00d4ff}
+html,body{height:100%}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#000;color:#fff;overflow-x:hidden;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(800px 500px at 20% 10%,var(--c1),transparent 60%),radial-gradient(800px 500px at 85% 85%,var(--c2),transparent 60%),radial-gradient(700px 500px at 50% 100%,var(--c3),transparent 60%),#000;transition:1s;opacity:.9}
+body.wallpaper-on::after{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.18),transparent 45%);background-size:120px 120px;animation:drift 9s linear infinite;opacity:.35}
+@keyframes drift{0%{background-position:0 0}100%{background-position:120px 120px}}
+.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:rgba(0,0,0,.55);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.12)}
+.logo{font-weight:900;font-size:22px;letter-spacing:.5px}.logo span{color:#ff5e8a}
+.top button{background:#fff;color:#000;border:0;padding:9px 14px;border-radius:999px;font-weight:800;cursor:pointer}
+.wrap{max-width:980px;margin:0 auto;padding:18px 16px 60px}
+.card{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);border-radius:24px;padding:20px;backdrop-filter:blur(16px);box-shadow:0 20px 50px rgba(0,0,0,.35);margin-bottom:16px}
+.center{text-align:center}
+.eyebrow{letter-spacing:3px;font-size:12px;opacity:.75;text-transform:uppercase}
+#clock{font-size:clamp(64px,14vw,150px);font-weight:900;letter-spacing:-4px;line-height:.95;margin:8px 0 4px;font-variant-numeric:tabular-nums;text-shadow:0 10px 40px rgba(0,0,0,.5)}
+#date{font-size:clamp(18px,4vw,28px);font-weight:700}
+#sec{font-size:clamp(18px,3vw,26px);opacity:.85;margin-top:6px}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:16px}
+button{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.14);color:#fff;padding:11px 16px;border-radius:999px;cursor:pointer;font-weight:700;font-size:14px}
+button.active,button.primary{background:#fff;color:#000;border-color:#fff}
+input[type=color]{width:52px;height:42px;border:0;background:none;cursor:pointer}
+select,input[type=number]{background:#111;color:#fff;border:1px solid rgba(255,255,255,.3);padding:11px;border-radius:12px;font-weight:700}
+label{font-size:13px;opacity:.85;display:flex;align-items:center;gap:8px;justify-content:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:650px){.grid{grid-template-columns:1fr}}
+h2{font-size:20px;margin-bottom:6px}h3{font-size:16px;margin:10px 0 8px}.muted{opacity:.75;font-size:14px;line-height:1.5}
+.widget-preview{border-radius:18px;padding:22px;text-align:center;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.2);min-height:130px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.widget-preview.small{font-size:28px}.widget-preview.medium{font-size:44px}.widget-preview.large{font-size:62px}
+.wtime{font-weight:900;line-height:1}.wdate{font-size:14px;opacity:.8;margin-top:6px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pills button{padding:8px 12px;font-size:13px}
+.timer-ring{width:180px;height:180px;border-radius:50%;margin:14px auto;display:grid;place-items:center;background:conic-gradient(#fff var(--p,0%),rgba(255,255,255,.18) 0);position:relative}
+.timer-ring::after{content:"";position:absolute;inset:14px;background:#000;border-radius:50%}
+#timerText{position:relative;z-index:1;font-size:42px;font-weight:900}
+#saver{position:fixed;inset:0;background:#000;z-index:100;display:none;place-items:center;text-align:center;cursor:pointer}
+#saver.show{display:grid}
+#saverTime{font-size:clamp(70px,16vw,180px);font-weight:900;letter-spacing:-4px;animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+#saverDate{font-size:22px;opacity:.7}
+.hint{position:fixed;bottom:20px;left:0;right:0;text-align:center;font-size:13px;opacity:.6;z-index:101}
+footer{text-align:center;opacity:.6;font-size:13px;padding:10px}
+</style>
+</head>
+<body>
+<header class="top"><div class="logo">ED <span>Clock</span></div><button onclick="openSaver()">Screensaver ⛶</button></header>
+<main class="wrap">
+<section class="card center">
+<div class="eyebrow">ED Clock • Live</div>
+<div id="clock">00:00</div>
+<div id="date">—</div>
+<div id="sec">00 seconds</div>
+<div class="row">
+<button id="btn12" class="active" onclick="setHour(12)">12 Hour</button>
+<button id="btn24" onclick="setHour(24)">24 Hour</button>
+<button id="btnSec" class="active" onclick="toggleSec()">Seconds: ON</button>
+<button onclick="toggleFull()">Fullscreen</button>
+</div>
+<div class="row" style="margin-top:14px">
+<label>Custom color <input type="color" id="picker" value="#ff5e8a" oninput="customColor(this.value)"></label>
+<label><input type="checkbox" id="wallChk" onchange="document.body.classList.toggle('wallpaper-on',this.checked)"> Live wallpaper</label>
+<label>Speed <select id="speed" onchange="setSpeed(this.value)"><option value="9">Slow</option><option value="4" selected>Normal</option><option value="1.5">Fast</option></select></label>
+</div>
+<div class="pills" style="justify-content:center">
+<button class="active" onclick="theme('sunset',this)">🌇 Sunset</button>
+<button onclick="theme('ocean',this)">🌊 Ocean</button>
+<button onclick="theme('forest',this)">🌲 Forest</button>
+<button onclick="theme('neon',this)">✨ Neon</button>
+<button onclick="theme('mono',this)">⚫ Mono</button>
+<button onclick="theme('auto',this)">🕒 Auto / Time of Day</button>
+</div>
+</section>
 
-:root{
-  --bg:#0a0a10;
-  --surface:#14141d;
-  --surface-2:#1c1c28;
-  --line:rgba(255,255,255,.12);
-  --text:#f6f4ef;
-  --muted:#a9a7b8;
-  --accent:#ff6b35;
-  --accent-2:#ffd166;
-  --safe-area-inset-top:0px;
+<section class="grid">
+<div class="card">
+<h2>🎨 Widget Studio</h2><p class="muted">Preview how ED Clock looks as a home-screen widget.</p>
+<div id="widgetPreview" class="widget-preview medium"><div class="wtime" id="wTime">00:00</div><div class="wdate" id="wDate">—</div></div>
+<h3>Size</h3><div class="pills"><button onclick="wSize('small',this)">Small</button><button class="active" onclick="wSize('medium',this)">Medium</button><button onclick="wSize('large',this)">Large</button></div>
+<h3>Style</h3><div class="pills"><button class="active" onclick="wStyle('digital',this)">Digital</button><button onclick="wStyle('minimal',this)">Minimal</button><button onclick="wStyle('analog',this)">Analog</button></div>
+</div>
+<div class="card center">
+<h2>⏱️ Focus Timer</h2><p class="muted">Stay focused. Work, rest, repeat.</p>
+<div class="timer-ring" id="ring"><div id="timerText">25:00</div></div>
+<div id="sessionText">Session 1 • Focus</div>
+<div class="row"><label>Minutes <input type="number" id="mins" value="25" min="1" max="180"></label><button class="primary" onclick="setTimer()">Set</button></div>
+<div class="row"><button class="primary" id="startBtn" onclick="toggleTimer()">Start</button><button onclick="resetTimer()">Reset</button><button onclick="breakTimer()">5-min Break</button></div>
+</div>
+</section>
+
+<section class="card">
+<h2>🌈 About ED Clock</h2><p class="muted">Adaptive color-shifting clock. The background color changes smoothly through the day. Use the themes above, or pick your own color. Tap Screensaver for a calm full-screen clock. Turn on Live Wallpaper for animated background. Use Focus Timer for Pomodoro sessions.<br><br><b>Install:</b> On Android Chrome → Menu → Add to Home screen / Install app. It opens standalone with a black background.</p>
+</section>
+</main>
+<footer>ED Clock • Made for you • Black • Standalone</footer>
+
+<div id="saver" onclick="closeSaver()"><div><div id="saverTime">00:00</div><div id="saverDate">—</div><div style="opacity:.6;margin-top:12px">Tap anywhere to exit</div></div></div>
+
+<script>
+let hourMode=24, showSec=true, autoTheme=false, focusTotal=25*60, focusLeft=25*60, timerOn=false, timerId=null, session=1, isBreak=false;
+const clockEl=document.getElementById('clock'), dateEl=document.getElementById('date'), secEl=document.getElementById('sec');
+function pad(n){return String(n).padStart(2,'0')}
+function fmt(d){
+  let h=d.getHours(), ap='';
+  if(hourMode===12){ap=h>=12?' PM':' AM'; h=h%12||12}
+  return pad(h)+':'+pad(d.getMinutes())+(showSec?':'+pad(d.getSeconds()):'')+ap;
 }
-@media (prefers-color-scheme: light){
-  :root{
-    --bg:#f4f1ea;
-    --surface:#ffffff;
-    --surface-2:#ece8df;
-    --line:rgba(20,18,30,.14);
-    --text:#17141f;
-    --muted:#676371;
-    --accent:#e84d2a;
-    --accent-2:#f2a900;
-  }
+function tick(){
+  const d=new Date();
+  clockEl.textContent=fmt(d);
+  dateEl.textContent=d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  secEl.textContent=pad(d.getSeconds())+' seconds • '+d.toLocaleDateString(undefined,{weekday:'short'});
+  document.getElementById('wTime').textContent=fmt(d);
+  document.getElementById('wDate').textContent=dateEl.textContent;
+  document.getElementById('saverTime').textContent=fmt(d);
+  document.getElementById('saverDate').textContent=dateEl.textContent;
+  if(autoTheme) autoColor(d.getHours());
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font-family:"Space Grotesk",system-ui,sans-serif}
-.font-mono2{font-family:"JetBrains Mono",monospace}
-.font-serif2{font-family:"DM Serif Display",serif}
-.no-scrollbar::-webkit-scrollbar{display:none}
-.no-scrollbar{scrollbar-width:none}
-@keyframes drift{0%{transform:translate(0,0)}25%{transform:translate(22px,-16px)}50%{transform:translate(-14px,18px)}75%{transform:translate(18px,14px)}100%{transform:translate(0,0)}}
-@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@keyframes pulseSoft{0%,100%{opacity:.55}50%{opacity:1}}
-@keyframes shimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.drift{animation:drift 28s ease-in-out infinite}
-.floaty{animation:floaty 5s ease-in-out infinite}
-.shimmer{background-size:220% 220%;animation:shimmer 10s ease infinite}
-input[type="range"]{accent-color:var(--accent)}
-input[type="color"]{appearance:none;border:0;padding:0;background:none;width:44px;height:44px;border-radius:999px;overflow:hidden;cursor:pointer}
-input[type="color"]::-webkit-color-swatch-wrapper{padding:0}
-input[type="color"]::-webkit-color-swatch{border:2px solid rgba(255,255,255,.35);border-radius:999px}
+setInterval(tick,1000); tick();
+function setHour(m){hourMode=m;document.getElementById('btn12').classList.toggle('active',m===12);document.getElementById('btn24').classList.toggle('active',m===24);tick()}
+function toggleSec(){showSec=!showSec;document.getElementById('btnSec').textContent='Seconds: '+(showSec?'ON':'OFF');document.getElementById('btnSec').classList.toggle('active',showSec);tick()}
+function toggleFull(){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen()}
+function setVar(a,b,c){document.documentElement.style.setProperty('--c1',a);document.documentElement.style.setProperty('--c2',b);document.documentElement.style.setProperty('--c3',c)}
+function activate(btn){document.querySelectorAll('.pills button').forEach(b=>b.classList.remove('active')); if(btn)btn.classList.add('active')}
+function theme(name,btn){autoTheme=false;activate(btn);
+  if(name==='sunset')setVar('#ff5e8a','#ff9a3d','#7c5cff');
+  if(name==='ocean')setVar('#00d4ff','#0066ff','#00ffa3');
+  if(name==='forest')setVar('#00ff88','#0a7a42','#cfff00');
+  if(name==='neon')setVar('#ff00e5','#7c5cff','#00e5ff');
+  if(name==='mono')setVar('#222','#555','#999');
+  if(name==='auto'){autoTheme=true;tick()}
+}
+function autoColor(h){if(h<6)setVar('#1a1a40','#2b2b6b','#ff5e8a');else if(h<12)setVar('#ff9a3d','#ffd93d','#00d4ff');else if(h<18)setVar('#ff5e8a','#ff9a3d','#7c5cff');else setVar('#0a0a2a','#3b0a5a','#00d4ff')}
+function customColor(v){autoTheme=false;setVar(v,'#7c5cff','#00d4ff')}
+function setSpeed(v){document.body.style.setProperty('--speed',v+'s');document.querySelector('body').style.animationDuration=v+'s';let s=document.createElement('style');s.textContent='body.wallpaper-on::after{animation-duration:'+v+'s}';document.head.appendChild(s)}
+function wSize(s,btn){const p=document.getElementById('widgetPreview');p.className='widget-preview '+s;activate(btn)}
+function wStyle(s,btn){activate(btn);const p=document.getElementById('widgetPreview');const t=document.getElementById('wTime');
+  if(s==='minimal'){p.style.background='transparent';p.style.border='1px dashed rgba(255,255,255,.4)';t.style.letterSpacing='6px'}
+  else if(s==='analog'){t.textContent='◷ '+fmt(new Date());p.style.background='rgba(0,0,0,.55)'}
+  else{p.style.background='rgba(0,0,0,.45)';p.style.border='1px solid rgba(255,255,255,.2)';t.style.letterSpacing='-2px'}}
+function openSaver(){document.getElementById('saver').classList.add('show');tick()}
+function closeSaver(){document.getElementById('saver').classList.remove('show')}
+function fmtTimer(s){return pad(Math.floor(s/60))+':'+pad(s%60)}
+function drawTimer(){document.getElementById('timerText').textContent=fmtTimer(focusLeft);document.getElementById('ring').style.setProperty('--p',((1-focusLeft/focusTotal)*100)+'%');document.getElementById('sessionText').textContent='Session '+session+' • '+(isBreak?'Break':'Focus')}
+function setTimer(){focusTotal=parseInt(document.getElementById('mins').value||25)*60;focusLeft=focusTotal;isBreak=false;drawTimer()}
+function toggleTimer(){timerOn=!timerOn;document.getElementById('startBtn').textContent=timerOn?'Pause':'Start';
+  if(timerOn){timerId=setInterval(()=>{focusLeft--;drawTimer();if(focusLeft<=0){clearInterval(timerId);timerOn=false;document.getElementById('startBtn').textContent='Start';alert(isBreak?'Break over! Back to focus.':'Focus done! Take a break.');if(!isBreak)session++;}},1000)}
+  else clearInterval(timerId)}
+function resetTimer(){clearInterval(timerId);timerOn=false;document.getElementById('startBtn').textContent='Start';focusLeft=focusTotal;drawTimer()}
+function breakTimer(){isBreak=true;focusTotal=5*60;focusLeft=focusTotal;drawTimer()}
+drawTimer();
+</script>
+</body>
+</html>
